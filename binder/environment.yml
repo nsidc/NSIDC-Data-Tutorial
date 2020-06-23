@@ -22,4 +22,5 @@ dependencies:
 # - holoviews=1.12.7
 - netcdf4=1.5.3
 - jupyter-offlinenotebook
+- gql=2.0.0
 

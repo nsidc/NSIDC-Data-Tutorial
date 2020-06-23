@@ -1,0 +1,9 @@
+version: '3.4'
+services:
+
+  tutorials:
+    user: root
+    environment:
+      - NB_UID  # Must be set in the host env: `export NB_UID=$(id -u)`
+    volumes:
+      - ./notebooks:/home/jovyan/work:rw

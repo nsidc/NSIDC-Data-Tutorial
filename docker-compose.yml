@@ -2,7 +2,7 @@ version: '3.4'
 services:
 
   tutorials:
-    image: nsidc/tutorials
+    image: nsidc/tutorials:latest
     container_name: tutorials
     ports:
       - 8888:8888

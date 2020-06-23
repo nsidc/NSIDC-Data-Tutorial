@@ -55,6 +55,8 @@ Or, with docker-compose:
 docker-compose up
 ```
 
+Learn more about using the extra docker-compose files as overrides [here](https://docs.docker.com/compose/extends/).
+
 If you want to mount a directory with write permissions, you need to grant the container the same permissions as the one on the directory to be mounted and tell it that has "root" access (within the container). This is important if you want to persist your work or download data to a local directory and not just the docker container. Run the example command below for this option:
 
 ```bash
@@ -103,6 +105,8 @@ Or, with docker-compose:
 ```bash
 docker-compose up
 ```
+
+Learn more about using the extra docker-compose files as overrides [here](https://docs.docker.com/compose/extends/).
 
 If you want to mount a directory with write permissions you need to grant the container the same permissions as the one on the directory to be mounted and tell it that has "root" access (within the container)
 
