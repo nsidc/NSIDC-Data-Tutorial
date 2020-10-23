@@ -1,7 +1,9 @@
-jupyter labextension install --clean @jupyter-widgets/jupyterlab-manager \
+jupyter labextension install --no-build --clean @jupyter-widgets/jupyterlab-manager \
 jupyter-offlinenotebook \
 bqplot \
 jupyter-matplotlib \
 jupyter-vuetify \
 @jupyter-widgets/jupyterlab-sidecar \
 @jupyterlab/geojson-extension
+
+jupyter lab build --minimize=False
