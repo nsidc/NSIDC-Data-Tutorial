@@ -3,6 +3,7 @@ from shapely.geometry import box
 import ipywidgets as widgets
 import itertools
 from ipyleaflet import projections, basemaps, DrawControl
+import numpy as np
 
 north_3413 = {
     'name': 'EPSG:3413',
@@ -154,3 +155,53 @@ def get_minimal_bbox(geometry):
     coords = list(itertools.chain.from_iterable(coords))
     return ','.join(coords)
 
+
+class Grid:
+    """
+    Grid specific helper functions.
+    """
+    
+    # Supported grid sizes
+    _SUPPORTED_SIZES = [60, 120, 240, 480, 960, 1920, 3840]
+    
+    @staticmethod
+    def bounds(x_min, x_max, y_min, y_max, grid_spacing):
+        """
+        Define bounding box for provided coordinates.
+        """
+        # Check input
+        # Check if requested grid size is allowable
+        if grid_spacing not in Grid._SUPPORTED_SIZES:
+            raise RuntimeError(f'Grid spacing shoud be one of {Grid._SUPPORTED_SIZES} to keep grids of different spacing aligned')
+    
+        if x_min >= x_max:
+            raise RuntimeError(f'xmin ({x_min}) must be < xmax ({x_max})')
+            
+        elif y_min >= y_max:
+            raise RuntimeError(f'y_min ({y_min}) must be < y_max ({y_max})')
+
+        # Ddeteremine grid edges
+        x0_min = np.floor(x_min/grid_spacing)*grid_spacing
+        y0_min = np.floor(y_min/grid_spacing)*grid_spacing
+        x0_max = np.ceil(x_max/grid_spacing)*grid_spacing
+        y0_max = np.ceil(y_max/grid_spacing)*grid_spacing
+        
+        return x0_min, x0_max, y0_min, y0_max
+    
+    def create_grid(x_min, x_max, y_min, y_max, grid_spacing):
+        """
+        Create new grid given the spacing and bounding box for the region.
+        """
+        # Calculate grid bounds
+        x0_min, x0_max, y0_min, y0_max = Grid.bounds(x_min, x_max, y_min, y_max, grid_spacing)
+
+        # Generate vectors of grid centers
+        # Cell center offset
+        cell_center_offset = grid_spacing/2
+        x = np.arange(x0_min + cell_center_offset, x0_max, grid_spacing)
+        y = np.arange(y0_min + cell_center_offset, y0_max, grid_spacing)
+        
+        return x, y
+
+        
+        

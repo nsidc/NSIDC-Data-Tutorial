@@ -63,11 +63,12 @@ class itslive_ui:
         self.coverage = resp.json()
         return self.coverage
 
-    def get_granule_urls(self, params):
+    @staticmethod
+    def get_granule_urls(params):
         base_url = 'https://staging.itslive-search.apps.nsidc.org/velocities/urls/'
         resp = requests.get(base_url, params=params, verify=False)
-        self.urls = resp.json()
-        return self.urls
+        return resp.json()
+#         return self.urls
 
     def get_url_size(self, url, sizes):
         size = 0
@@ -108,7 +109,8 @@ class itslive_ui:
             params['time_delta'] = self.time_delta.value
         return params
 
-    def _get_temporal_coverage(self, url):
+    @staticmethod
+    def _get_temporal_coverage(url):
         file_name = url.split('/')[-1].replace('.nc', '')
         file_components = file_name.split('_')
         start_date = datetime.strptime(file_components[3], "%Y%m%d").date()
@@ -123,21 +125,34 @@ class itslive_ui:
         }
         return coverage
 
-    def filter_urls(self, urls, max_files_per_year, months):
+    @staticmethod
+    def filter_urls(urls, max_files_per_year, months):
         # LE07_L1TP_008012_20030417_20170125_01_T1_X_LE07_L1TP_008012_20030401_20170126_01_T1_G0240V01_P095.nc
         filtered_urls = []
-        files_by_year = defaultdict(list)
+        files_by_year = {}
+        
         for url in urls:
-            coverage = self._get_temporal_coverage(url)
+            coverage = itslive_ui._get_temporal_coverage(url)
+            
             if coverage['mid_date'].month in months:
-                # print(f"month: {coverage['mid_date'].month}")
-                if coverage['mid_date'].year in files_by_year:
-                    if len(files_by_year[coverage['mid_date'].year]) < max_files_per_year:
-                        files_by_year[coverage['mid_date'].year].append(url)
-                        filtered_urls.append(url)
-                else:
-                    files_by_year[coverage['mid_date'].year].append(url)
-                    filtered_urls.append(url)
+                year_urls = files_by_year.setdefault(coverage['mid_date'].year, [])
+  
+                if len(year_urls) >= max_files_per_year:
+                    continue
+
+                year_urls.append(url)
+                filtered_urls.append(url)
+
+#                 print(f"year: {coverage['mid_date'].year} month: {coverage['mid_date'].month}")
+#                 if coverage['mid_date'].year in files_by_year:
+#                     if len(files_by_year[coverage['mid_date'].year]) < max_files_per_year:
+#                         files_by_year[coverage['mid_date'].year].append(url)
+#                         filtered_urls.append(url)
+#                 else:
+#                     files_by_year[coverage['mid_date'].year].append(url)
+#                     filtered_urls.append(url)
+
+        print("URL years: ", files_by_year)
         return filtered_urls
 
     def download_velocity_pairs(self, urls, start, end):
@@ -166,7 +181,8 @@ class itslive_ui:
             velocity_pairs.append(ds)
         return velocity_pairs
 
-    def transform_coord(self, proj1, proj2, lon, lat):
+    @staticmethod
+    def transform_coord(proj1, proj2, lon, lat):
         """Transform coordinates from proj1 to proj2 (EPSG num)."""
         # Set full EPSG projection strings
         proj1 = pyproj.Proj("+init=EPSG:"+proj1)
