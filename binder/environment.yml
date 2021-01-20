@@ -2,24 +2,42 @@ name: tutorials
 channels:
 - conda-forge
 dependencies:
-# - python=3.7.*
+- python=3.7
+- awscli=1.18.103
 - matplotlib-base=3.2.1
-- descartes=1.1.0
-- pandas=0.24.2
+- dask=2.20.0
+- ipyleaflet=0.13.1
+- pandas=1.0.4
 - cartopy=0.17.0
 - fiona=1.8.4
 - shapely=1.6.4
-- geopandas=0.7.0
-- h5py=2.9.0
+- geopandas=0.8.1
+- joblib=0.13.2
+- h5py=2.10.0
 - requests=2.22.0
-- plotly=4.0.0
+- plotly=4.8.2
 - geopy=1.20.0
-- xarray=0.14.0
+- xarray=0.16.2
 - pyresample=1.13.2
-# - hvplot=0.5.2
-- awscli=1.16.296
 - rasterio=1.1.1
-# - holoviews=1.12.7
 - netcdf4=1.5.3
+- vaex=3.0.0
+- gql=2.0.0
+- zarr=2.5.0
+- intake=0.6.0
+- pystac=0.5.3
+- descartes=1.1.0
+- jupyterlab=2.2.9
+- ipympl=0.5.7
+- tqdm
+- nodejs
+- s3fs
+- intake-xarray
+- intake-stac
+- flake8
 - jupyter-offlinenotebook
-
+- sidecar
+- pip
+- pip:
+  - icepyx
+  - python-cmr
